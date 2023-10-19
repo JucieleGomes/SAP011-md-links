@@ -1,6 +1,10 @@
 {
   "name": "md-links",
+  "description": "Validate links found in markdown files",
+  "author": "Juciele Gomes",
+  "private": true,
   "version": "0.1.0",
+  "license": "MIT",
   "engines": {
     "node": ">=16.x"
   },
@@ -8,5 +12,20 @@
     "createdAt": "2023-09-20T11:50:43.165Z",
     "version": "6.2.0",
     "commit": "a5360f78b634be4f14eaea996ee4c7afc85a2f48"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.23.0",
+    "@babel/core": "^7.23.2",
+    "@babel/plugin-transform-arrow-functions": "^7.22.5",
+    "@babel/preset-env": "^7.23.2",
+    "eslint": "^8.51.0",
+    "jest": "^29.7.0"
+  },
+  "scripts": {
+    "build": "babel src -d cli.js",
+    "test": "jest",
+    "lint":	"npx eslint ./src"  
   }
+
 }
+
