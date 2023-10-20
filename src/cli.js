@@ -1,19 +1,27 @@
 #!usr/bin/env	node
 
-const { soma, readFile} = require('./MdLinks.js');
-
-const resultado = soma(1,5);
-
-console.log(resultado);
-
+const {readFile} = require('./MdLinks.js')
 
 const input = process.argv;
 const filePath = input [2];
 
-readFile(filePath)
-.then((fileContent) =>{
-const regex = /https?:\/\/[^\s/$.?#].[^\s]*/
-const link = fileContent.match(regex);
-console.log(link[0]);
-})
+
+
+readFile(filePath, 'utf-8')
+  .then((fileContent) => {
+    const regex = /https?:\/\/[^\s/$.?#].[^\s]*/g;
+    const links = fileContent.match(regex);
+
+    if (links) {
+      for (let index = 0; index < links.length; index++) {
+        const link = links[index];
+        console.log(link);
+      }
+    } else {
+      console.log('Nenhum link encontrado no arquivo.');
+    }
+  })
+  .catch((error) => {
+    console.error('Ocorreu um erro ao ler o arquivo:', error);
+  });
 
