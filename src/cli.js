@@ -13,19 +13,19 @@ readFile(filePath, 'utf-8')
     if (links) {
       for (let index = 0; index < links.length; index++) {
         const link = links[index];
-        console.log(link);
-        fetch(link) 
+
+fetch(link) 
   .then(response => {
+
+    const url = response.url;
+    const status = response.status;
+
     if (!response.ok) {
-      throw new Error('falhou a requisição');
+     console.log(`Invalid URL: ${url} Status: ${status}`);
     }
     if (response.status === 200) {
-      console.log('Link válido');
+      console.error(`Valid URL: ${url} Status: ${status}`);
     }
-
-    if (response.status === 404) {
-      throw new Error('não encontrou qualquer resultado');
-    } 
   })
   .catch(error => {
     console.error('Ocorreu um erro na requisição', error);
