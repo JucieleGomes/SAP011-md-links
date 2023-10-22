@@ -8,7 +8,10 @@ function readFile(filePath){
       resolve(data);
   })
 });
+
 }
 
 
-module.exports = {readFile }
+
+
+module.exports = {readFile}

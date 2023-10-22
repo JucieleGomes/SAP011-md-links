@@ -24,8 +24,9 @@
   "scripts": {
     "build": "babel src -d cli.js",
     "test": "jest",
-    "lint":	"npx eslint ./src"  
+    "lint": "npx eslint ./src"
+  },
+  "dependencies": {
+    "node-fetch": "^3.3.2"
   }
-
 }
-
