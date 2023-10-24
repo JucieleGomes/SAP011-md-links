@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 
-const { readFile } = require('./MdLinks.js');
+const { readFile, mdLinks } = require('./MdLinks.js');
 
 const input = process.argv;
 const filePath = input[2];
 
-readFile(filePath, 'utf-8')
+   readFile(filePath, 'utf-8')
   .then((fileContent) => {
     const regex = /https?:\/\/[^\s/$.?#].[^\s]*/g;
     const links = fileContent.match(regex);
@@ -14,9 +14,8 @@ readFile(filePath, 'utf-8')
       for (let index = 0; index < links.length; index++) {
         const link = links[index];
 
-fetch(link) 
+   fetch(link) 
   .then(response => {
-
     const url = response.url;
     const status = response.status;
 
@@ -38,6 +37,7 @@ fetch(link)
   .catch((error) => {
     console.error('Ocorreu um erro ao ler o arquivo:', error);
   });
+
 
 
 
