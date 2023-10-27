@@ -20,7 +20,7 @@ function readFile(filePath) {
       url: link[0],
       Path: filePath,
     }));
-    
+
     linksInfo.map((link) => {
       validateLinks(link);
     });
@@ -68,10 +68,10 @@ function validateLinks(link) {
       const status = response.status;
       const title = link.Title
 
-      if (!response.ok) {
-        console.log(`${title} - Invalid URL: ${url} Status: ${status}`);
-      } else if (response.status === 200) {
-        console.log(`${title} - Valid URL: ${url} Status: ${status}`);
+      if (status === 200) {
+        console.log(`${title} - OK: ${url} Status: ${status}`);
+      } else {
+        console.log(`${title} - FAIL: ${url} Status: ${status}`);
       }
     })
     .catch((error) => {
