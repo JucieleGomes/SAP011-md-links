@@ -1,5 +1,7 @@
 const fs = require("fs");
 const path = require("path");
+const input = process.argv;
+const filePath = input[2];
 
 
 
@@ -7,28 +9,28 @@ function readFile(filePath) {
   return new Promise((resolve, reject) => {
     fs.readFile(filePath, "utf8", (err, data) => {
       if (err) reject(err);
-      resolve(data)
-    })
+      resolve(data);
+    });
   }).then((fileContent) => {
-  
     const regex = /https?:\/\/[^\s/$.?#].[^\s]*/g;
-    const links = fileContent.match(regex);
+    const links = [...fileContent.matchAll(regex)]
 
-    if (links) {
-      for (let index = 0; index < links.length; index++) {
-        const link = links[index];
-        validateLinks(link); 
-      }
-    } else {
-      console.log('Nenhum link encontrado no arquivo.');
-    }
-}) 
-.catch((error) => {
-  console.error('Ocorreu um erro ao ler o arquivo:', error);
-});
+    const linksInfo = links.map((link) => ({
+      Title: link[1],
+      url: link[0],
+      Path: filePath,
+    }));
+    
+    linksInfo.map((link) => {
+      validateLinks(link);
+    });
+
+  }).catch((error) => {
+    console.error('Ocorreu um erro ao ler o arquivo:', error);
+  });
 }
 
-const root = './test/Files';
+
 let counter = 0;
 
 function mdLinks(dir) {
@@ -37,42 +39,46 @@ function mdLinks(dir) {
   for (const directory of directories) {
     const dirPath = path.join(dir, directory);
     const stats = fs.statSync(dirPath);
-
+    
+    //Se for um diretório chama a md para explorar
+    //os subdiretórios
     if (stats.isDirectory()) {
       mdLinks(dirPath);
-
     } 
     
+    //Se for um arquivo verifica se aextensão
+    // é md.
     if(path.extname(dirPath) === '.md') {
       foundMdFile = true;
       readFile(dirPath)
-      console.log(dirPath);
       counter += 1;
+      
     } if(!foundMdFile){
       console.log("There are no .md files in the directory");
     }
   }
 }
 
-mdLinks(root);
+mdLinks(filePath);
 
 function validateLinks(link) {
-  fetch(link)
+  fetch(link.url)
     .then((response) => {
-      const url = response.url;
+      const url = link.url;
       const status = response.status;
+      const title = link.Title
 
       if (!response.ok) {
-        console.log(`Invalid URL: ${url} Status: ${status}`);
+        console.log(`${title} - Invalid URL: ${url} Status: ${status}`);
       } else if (response.status === 200) {
-        console.log(`Valid URL: ${url} Status: ${status}`);
+        console.log(`${title} - Valid URL: ${url} Status: ${status}`);
       }
     })
     .catch((error) => {
       console.error('Ocorreu um erro na requisição', error);
     });
 }
-
+  
 
 // module.exports = { readFile, mdLinks };
 
