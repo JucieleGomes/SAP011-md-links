@@ -21,3 +21,5 @@ OLA, MUNDO!
 [VITE](https://vitejs.dev/)
 
 [MarvelApp](https://marvelapp.com/)
+
+[DIO](https://www.dio.me/articles/guia-para-o-file-system-do-nodejssdhaskjdhaskjdhasjkdhaskdhsakjdhaskjdhasd)
