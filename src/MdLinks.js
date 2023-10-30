@@ -23,15 +23,15 @@ function readFile(filePath) {
     }));
  
    
-    linksInfo.map((link) => {
-      validateLinks(link);
+    const validationPromises = linksInfo.map((link) => {
+     return validateLinks(link);
     });
-    statsLinks(linksInfo);
+    Promise.all(validationPromises).then((links)=>{
+      statsLinks(links);
+    })
     
    return linksInfo
 
-
-  
 
   }).catch((error) => {
     console.error('Ocorreu um erro ao ler o arquivo:', error);
@@ -51,7 +51,7 @@ function mdLinks(dir) {
     if (stats.isDirectory()) {
       mdLinks(dirPath);
     }
-    
+
     if (path.extname(dirPath) === '.md') {
       foundMdFile = true;
       readFile(dirPath)
@@ -64,7 +64,7 @@ function mdLinks(dir) {
 }
 
 function validateLinks(link) {
-  fetch(link.url)
+ return fetch(link.url)
     .then((response) => {
       link.status = response.status;
 
@@ -77,7 +77,8 @@ function validateLinks(link) {
         console.log("Invalid link:" , link.url, link.status);
    
       }
-    return link  
+
+      return link
 
     })
     .catch((error) => {
@@ -89,11 +90,11 @@ function validateLinks(link) {
 function statsLinks(links) {
   console.log(links);
 
-  const validLinks = links.filter((link) => link.status === 200);
-  const invalidLinks = links.filter((link) => link.status !== 200);
+  const validLinks = links.filter((link) => link.status === 200).length;
+  const invalidLinks = links.filter((link) => link.status !== 200).length;
   const totalLinks = links.length;
-  console.log('Valid links:', validLinks.length);
-  console.log('Broken links:', invalidLinks.length);
+  console.log('Valid links:', validLinks);
+  console.log('Broken links:', invalidLinks);
   console.log('Total Links:', totalLinks);
 }
 
