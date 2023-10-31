@@ -12,9 +12,13 @@ OLA, MUNDO!
 
 [Visual Studio Code](https://code.visualstudio.com/)
 
+[Node.js](https://nodejs.org/en)
+
 [Figma](https://www.figma.com/login)
 
 [Trello](https://trello.com/pt-BR/login)
+
+[Figma](https://www.figma.com/login)
 
 [Firebase](https://firebase.google.com/docs/auth/web/start?hl=pt-br)
 

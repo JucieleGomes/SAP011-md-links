@@ -1,44 +1,39 @@
 #!/usr/bin/env node
 
-// const { readFile } = require('./MdLinks.js');
+const { mdLinks } = require('./MdLinks.js')
+const input = process.argv;
+const filePath = input[2];
 
-// const input = process.argv;
-// const filePath = input[2];
+const options = {
+  validate: process.argv.includes('--validate'),
+  stats: process.argv.includes('--stats'),
+}
 
+  mdLinks(filePath, options).then((links)=>{
 
-//   readFile(filePath, 'utf-8')
-//     .then((fileContent) => {
-  
-//         const regex = /https?:\/\/[^\s/$.?#].[^\s]*/g;
-//         const links = fileContent.match(regex);
+        if(options.validate && options.stats){
+            console.log('Total:', links.total, 'Valid links:',
+             links.validLinks, 'Invalid links:', links.invalidLinks, 'Unique links:', links.uniqueLinks);
     
-//         if (links) {
-//           for (let index = 0; index < links.length; index++) {
-//             const link = links[index];
-//             validateLinks(link); 
-//           }
-//         } else {
-//           console.log('Nenhum link encontrado no arquivo.');
-//         }
-//     }) 
-//     .catch((error) => {
-//       console.error('Ocorreu um erro ao ler o arquivo:', error);
-//     });
+        }else if(options.validate){
+            links.map((link)=>{
+             console.log('Title:', link.title, 'Url:', link.url, 'Path:', link.path, 
+            'Status:', link.status);
+        })
+    
+        }else if(options.stats){
+            console.log('Total:', links.totalLinks, 'Unique:', links.uniqueLinks);
 
 
-// function validateLinks(link) {
-//   fetch(link)
-//     .then((response) => {
-//       const url = response.url;
-//       const status = response.status;
+        }else if(!options.stats && !options.validate){
+            links.map((link)=>{
+                console.log('Title:', link.title, 'Url:', link.url, 'Path:', link.path);
+            })
+        }
 
-//       if (!response.ok) {
-//         console.log(`Invalid URL: ${url} Status: ${status}`);
-//       } else if (response.status === 200) {
-//         console.log(`Valid URL: ${url} Status: ${status}`);
-//       }
-//     })
-//     .catch((error) => {
-//       console.error('Ocorreu um erro na requisição', error);
-//     });
-// }
+    })
+        
+      
+
+
+

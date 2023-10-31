@@ -5,44 +5,9 @@ const filePath = input[2];
 
 
 
-function readFile(filePath) {
-  return new Promise((resolve, reject) => {
-    fs.readFile(filePath, "utf8", (err, data) => {
-      if (err) reject(err);
-      resolve(data);
-    });
-  }).then((fileContent) => {
-    const regex = /\[(.*?)\]\((https?:\/\/[^\s/$.?#].[^\s]*)\)/g;
-    const links = [...fileContent.matchAll(regex)]
-
-
-    const linksInfo = links.map((link) => ({
-      Title: link[1],
-      url: link[2],
-      Path: filePath,
-    }));
- 
-   
-    const validationPromises = linksInfo.map((link) => {
-     return validateLinks(link);
-    });
-    Promise.all(validationPromises).then((links)=>{
-      statsLinks(links);
-    })
-    
-   return linksInfo
-
-
-  }).catch((error) => {
-    console.error('Ocorreu um erro ao ler o arquivo:', error);
-  });
-}
-
-
-let counter = 0;
-
-function mdLinks(dir) {
+function mdLinks(dir, options) {
   const directories = fs.readdirSync(dir);
+  let foundMdFile = false;
 
   for (const directory of directories) {
     const dirPath = path.join(dir, directory);
@@ -54,13 +19,53 @@ function mdLinks(dir) {
 
     if (path.extname(dirPath) === '.md') {
       foundMdFile = true;
-      readFile(dirPath)
-      counter += 1;
+      return readFile(dirPath, options)
       
     } if(!foundMdFile){
       console.log("There are no .md files in the directory");
     }
   }
+}
+
+function readFile(filePath, options) {
+console.log("readFile", filePath);
+  return new Promise((resolve, reject) => {
+    fs.readFile(filePath, "utf8", (err, data) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(data);
+      }
+    });
+  })
+    .then((fileContent) => {
+      const regex = /\[(.*?)\]\((https?:\/\/[^\s/$.?#].[^\s]*)\)/g;
+      const links = [...fileContent.matchAll(regex)];
+      const linksInfo = links.map((link) => ({
+        title: link[1],
+        url: link[2],
+        path: filePath,
+      }));
+
+      if (options.validate && options.stats) {
+        const validationPromises = linksInfo.map((link) => validateLinks(link));
+        return Promise.all(validationPromises)
+          .then((links) => {
+            statsLinks(links);
+          })
+
+      } else if (options.validate) {
+        const validationPromises = linksInfo.map((link) => validateLinks(link));
+        return Promise.all(validationPromises)
+
+      } else if (options.stats) {
+        return statsLinks(links);
+      }
+      return linksInfo;
+    })
+    .catch((error) => {
+     return error.message;
+    });
 }
 
 function validateLinks(link) {
@@ -70,32 +75,33 @@ function validateLinks(link) {
 
       if (response.status === 200) {
         link.isValid = true;
-       console.log("Valid Link:", link.url, link.status);
 
       } else if (response.status !== 200) {
         link.isValid = false;
-        console.log("Invalid link:" , link.url, link.status);
-   
       }
 
       return link
 
     })
     .catch((error) => {
-      console.error('Ocorreu um erro na requisição', error);
+      return error.message;
     });
 }
-  
 
 function statsLinks(links) {
-  console.log(links);
 
   const validLinks = links.filter((link) => link.status === 200).length;
   const invalidLinks = links.filter((link) => link.status !== 200).length;
+  const uniqueLinks = [...new Set(links.map((link) => link.url))].length;
   const totalLinks = links.length;
-  console.log('Valid links:', validLinks);
-  console.log('Broken links:', invalidLinks);
-  console.log('Total Links:', totalLinks);
+
+  return {
+    validLinks,
+    invalidLinks,
+    uniqueLinks,
+    totalLinks,
+  }
+
 }
 
 mdLinks(filePath);
