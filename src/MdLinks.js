@@ -28,7 +28,6 @@ function mdLinks(dir, options) {
 }
 
 function readFile(filePath, options) {
-console.log("readFile", filePath);
   return new Promise((resolve, reject) => {
     fs.readFile(filePath, "utf8", (err, data) => {
       if (err) {
@@ -51,7 +50,7 @@ console.log("readFile", filePath);
         const validationPromises = linksInfo.map((link) => validateLinks(link));
         return Promise.all(validationPromises)
           .then((links) => {
-            statsLinks(links);
+            return  statsLinks(links);
           })
 
       } else if (options.validate) {
