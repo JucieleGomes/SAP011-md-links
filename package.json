@@ -11,7 +11,6 @@
   "bin": {
     "mdLinks": "./src/cli.js"
   },
-
   "bootcamp": {
     "createdAt": "2023-09-20T11:50:43.165Z",
     "version": "6.2.0",
@@ -31,6 +30,7 @@
     "lint": "npx eslint ./src"
   },
   "dependencies": {
+    "chalk": "^2.4.2",
     "node-fetch": "^3.3.2"
   }
 }
