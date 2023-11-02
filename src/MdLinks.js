@@ -19,15 +19,15 @@ function mdLinks(dir, options) {
 
     if (path.extname(dirPath) === '.md') {
       foundMdFile = true;
-      return readFile(dirPath, options)
-      
-    } if(!foundMdFile){
-      console.log("There are no .md files in the directory");
-    }
-  }
+      return readMdFile(dirPath, options)
+  }}
+
+  if(!foundMdFile){
+    throw new Error("There are no .md files in the directory");
+  } 
 }
 
-function readFile(filePath, options) {
+function readMdFile(filePath, options) {
   return new Promise((resolve, reject) => {
     fs.readFile(filePath, "utf8", (err, data) => {
       if (err) {
@@ -106,4 +106,4 @@ function statsLinks(links) {
 mdLinks(filePath);
 
 
-module.exports = { readFile, mdLinks };
+module.exports = { readMdFile, mdLinks };

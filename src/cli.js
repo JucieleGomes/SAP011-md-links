@@ -26,17 +26,20 @@ const options = {
             console.log(chalk.white('Url: '), chalk.green(link.url)), 
             console.log(chalk.white('Path: '), chalk.grey(link.path)), 
             console.log(chalk.white('Status: '), chalk.green(link.status));
+            console.log('');
 
         }else{
-            console.log(chalk.white('Title: '), chalk.magenta(link.title)), 
+            console.log(chalk.white('Title: '), chalk.magenta(link.title)) 
             console.log(chalk.white('Url: '), chalk.red(link.url)), 
             console.log(chalk.white('Path: '), chalk.grey(link.path)), 
             console.log(chalk.white('Status: '), chalk.red(link.status))
+            console.log('');
         }})
     
         }else if(options.stats){
             console.log(chalk.cyan('Total: '), chalk.cyan(links.totalLinks))
             console.log(chalk.magenta('Unique: '), chalk.magenta(links.uniqueLinks)) 
+            console.log('');
           
 
         }else if(!options.stats && !options.validate){
@@ -46,5 +49,8 @@ const options = {
             console.log(chalk.white('Path: '), chalk.cyan(link.path))
         })}
 
-    })
+    }).catch((error) => {
+        console.log("teste", error);
+        console.error("Erro ao executar mdLinks:", error);
+      });
       
