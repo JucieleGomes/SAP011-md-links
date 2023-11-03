@@ -92,4 +92,4 @@ function statsLinks(links) {
 }
 
 
-module.exports = { readMdFile, statsLinks };
+module.exports = { readMdFile, statsLinks, validateLinks };

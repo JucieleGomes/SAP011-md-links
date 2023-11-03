@@ -1,4 +1,5 @@
-const { readMdFile, statsLinks} = require('../src/MdLinks');
+const { readMdFile, statsLinks, validateLinks } = require('../src/MdLinks');
+global.fetch = require('jest-fetch-mock');
 
 const filePath = './test/Files/File1.md';
 const emptyFile = './test/Files/Empty.md';
@@ -9,13 +10,12 @@ const options = {
   stats: true,
 };
 
-
 describe('readMdFile', () => {
   it('is a function', () => {
     expect(typeof readMdFile).toBe('function');
   });
 
-  it('Deve retornar os links encontrados no arquivo', () => {
+  it('Should return the links found in the file', () => {
     return readMdFile(filePath, options).then((result) => {
       expect(result).toEqual([
         {
@@ -40,26 +40,25 @@ describe('readMdFile', () => {
         }
       ]);
     });
-  });  
+  });
 
-  it('Deve retornar mensagem de erro', () => {
+  it('Should return an error message', () => {
     const erro = 'The file is empty or does not contain any links.';
     return readMdFile(emptyFile, options).then((result) => {
       expect(result).toEqual(erro);
     }).catch((error) => {
       expect(error.message).toEqual(erro);
-    });    
+    });
   });
 
-  it('Deve retornar mensagem de erro', () => {
+  it('Should return an error message', () => {
     const erro = 'It is not possible to continue, the file is not .md';
     return readMdFile(noMdFile, options).then((result) => {
       expect(result).toEqual(erro);
     }).catch((error) => {
       expect(error.message).toEqual(erro);
-    });    
+    });
   });
-
 });
 
 const links = [
@@ -80,14 +79,12 @@ const links = [
   },
 ];
 
-
-
 describe('statsLinks', () => {
   it('is a function', () => {
     expect(typeof statsLinks).toBe('function');
   });
 
-  it('Deve a estatística dos links', () => {
+  it('should return link statistics', () => {
     const validLinks = links.filter((link) => link.status === 200).length;
     const invalidLinks = links.filter((link) => link.status !== 200).length;
     const uniqueLinks = [...new Set(links.map((link) => link.url))].length;
@@ -102,5 +99,26 @@ describe('statsLinks', () => {
   });
 });
 
+describe('validateLinks', () => {
+  it('is a function', () => {
+    expect(typeof validateLinks).toBe('function');
+  });
 
-  
+  it('Deve retornar o status dos links', () => {
+    fetch.mockResponseOnce('validLink', { status: 200 });
+
+    return fetch('https://marvelapp.com/')
+      .then((response) => {
+        expect(response.status).toBe(200);
+      });
+  });
+
+  it('Deve retornar o status dos links', () => {
+    fetch.mockResponseOnce('invalidLink', { status: 404 });
+
+    return fetch('https://marvelapp.com/hahsdhsad')
+      .then((response) => {
+        expect(response.status).toBe(404);
+      });
+  });
+});
