@@ -27,6 +27,7 @@
   "scripts": {
     "build": "babel src -d cli.js",
     "test": "jest",
+    "test:coverage": "jest --coverage",
     "lint": "npx eslint ./src"
   },
   "dependencies": {

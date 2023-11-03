@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 const chalk = require('chalk')
-const { mdLinks } = require('./MdLinks.js')
+const { readMdFile } = require('./MdLinks.js')
 const input = process.argv;
 const filePath = input[2];
 
@@ -9,7 +9,7 @@ const options = {
   stats: process.argv.includes('--stats'),
 }
 
-  mdLinks(filePath, options).then((links)=>{
+  readMdFile(filePath, options).then((links)=>{
 
         if(options.stats && options.validate){
             console.log(chalk.cyan('Total:'), chalk.cyan(links.totalLinks))
@@ -50,7 +50,13 @@ const options = {
         })}
 
     }).catch((error) => {
-        console.log("teste", error);
-        console.error("Erro ao executar mdLinks:", error);
+        if (error instanceof Error && error.message === 
+            'It is not possible to continue, the file is not .md') {
+          console.log(chalk.bgRed('FAIL'), chalk.red('It is not possible to continue, the file is not .md'));
+        }else if(error instanceof Error && error.message ===
+             'The file is empty or does not contain any links.'){
+            console.log(chalk.bgRed('FAIL'), chalk.red('The file is empty or does not contain any links.'));
+        }
       });
+      
       
