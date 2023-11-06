@@ -1,5 +1,5 @@
 const { readMdFile, statsLinks, validateLinks } = require('../src/MdLinks');
-global.fetch = require('jest-fetch-mock');
+// global.fetch = require('jest-fetch-mock').enableFetchMocks()
 
 const filePath = './test/Files/File1.md';
 const emptyFile = './test/Files/Empty.md';
@@ -19,31 +19,90 @@ describe('readMdFile', () => {
 
     const linksResult = [
       {
-        Title: 'Git',
-        Url: 'https://git-scm.com/',
-        Path: filePath,
+        title: 'Git',
+        url: 'https://git-scm.com/',
+        path: filePath,
       },
       {
-        Title: 'GitHub',
-        Url: 'https://github.com/',
-        Path: filePath,
+        title: 'GitHub',
+        url: 'https://github.com/',
+        path: filePath,
       },
       {
-        Title: 'GitHub Pages',
-        Url: 'https://pages.github.com/',
-        Path: filePath,
+        title: 'GitHub Pages',
+        url: 'https://pages.github.com/',
+        path: filePath,
       },
       {
-        Title: 'Node.js',
-        Url: 'https://nodejs.org/en',
-        Path: filePath,
+        title: 'Node.js',
+        url: 'https://nodejs.org/en',
+        path: filePath,
+      },
+      {
+        title: 'Node.js',
+        url: 'https://nodejs.org/enjsdhhdjsad',
+        path: filePath,
+      }
+  
+    ]
+
+    const linksValidate = [
+      {
+        title: 'Git',
+        url: 'https://git-scm.com/',
+        path: filePath,
+        isValid: true,
+        status:200,
+      },
+      {
+        title: 'GitHub',
+        url: 'https://github.com/',
+        path: filePath,
+        isValid: true,
+       status: 200,
+      },
+      {
+        title: 'GitHub Pages',
+        url: 'https://pages.github.com/',
+        path: filePath,
+        isValid: true,
+        status: 200,
+      },
+      {
+        title: 'Node.js',
+        url: 'https://nodejs.org/en',
+        path: filePath,
+        isValid: true,
+        status: 200,
+      },
+      {
+        title: 'Node.js',
+        url: 'https://nodejs.org/enjsdhhdjsad',
+        path: filePath,
+        isValid: false,
+        status: 404,
       }
     ]
 
+  
+    it('Should return the links found in the file', () => { 
+    const options = {
+        validate: false,
+        stats: false,
+      };
 
-    it('Should return the links found in the file', () => {
-    return readMdFile(filePath).then((result) => {
-      expect(result).toBe(linksResult);
+    return readMdFile(filePath, options).then((result) => { 
+      expect(result).toStrictEqual(linksResult);
+    });
+  });
+
+  it('should return the status of the links found', () => {
+    const options = {
+      validate: true,
+      stats: false,
+    };
+    return readMdFile(filePath, options).then((result) => {
+      expect(result).toStrictEqual(linksValidate);
     });
   });
 
@@ -116,20 +175,25 @@ describe('validateLinks', () => {
   });
 
   it('Should return the status of the links', () => {
-    fetch.mockResponseOnce('validLink', { status: 200 });
+  global.fetch = jest.fn()
+  fetch.mockResolvedValue({status:200})
 
-    return fetch('https://marvelapp.com/')
+    // fetch.mockOnce('validLink', { status: 200 });
+
+    validateLinks({url:'https://marvelapp.com/'})
       .then((response) => {
-        expect(response.status).toBe(200);
+        expect(response.isValid).toBe(true);
       });
   });
 
   it('Should return the status of the links', () => {
-    fetch.mockResponseOnce('invalidLink', { status: 404 });
+    global.fetch = jest.fn()
+    fetch.mockResolvedValue({status:404})
+    // fetch.mockOnce('invalidLink', { status: 404 });
 
-    return fetch('https://marvelapp.com/hahsdhsad')
+     validateLinks({url:'https://marvelapp.com/hahsdhsad'})
       .then((response) => {
-        expect(response.status).toBe(404);
+        expect(response.isValid).toBe(false);
       });
   });
 });
