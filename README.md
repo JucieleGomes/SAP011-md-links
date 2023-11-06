@@ -66,7 +66,8 @@ Para gerar dados estátisticos dos links contidos no arquvivo .md utilize o coma
 
 `mdLinks <caminho-do-arquivo> --stats`
 
-![--stats](https://github.com/JucieleGomes/SAP011-md-links/assets/127780316/52519c66-24ed-4494-979b-b92b365e8278)
+![--stats](https://github.com/JucieleGomes/mdLinks-Library/assets/127780316/ccd2c50a-2f13-45c5-8f3e-35519f15132a)
+
 * * *
 ### 5.3 Validação:
 Para validar os links contidos no arquvivo .md utilize o comando:
@@ -97,6 +98,9 @@ Caso o arquivo não possua links ou esteja vazio sera mostrada a seguinte mensag
 * * *
 <a name="testes-unitarios"></a>
 ## 6. Testes unitários
+Os testes forma finalizados com mais de 80% de cobertura
+![testes](https://github.com/JucieleGomes/mdLinks-Library/assets/127780316/9f745f5a-4e9d-4c54-af1f-c02d7670d506)
+
 * * *
 <a name="checklist"></a>
 ## 🗹 7. CheckList 
