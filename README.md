@@ -45,8 +45,10 @@ como ela será usada por outras desenvolvedoras.
 
 <a name="instalacao"></a>
 ## 4. Instalação
-Para instalçao da biblioteca utilize o comando:
-`npm install mdLinks`
+Para instalaçao da biblioteca utilize o comando:
+
+`npm install md-links-juciele-gomes
+`
 * * *
 
 
