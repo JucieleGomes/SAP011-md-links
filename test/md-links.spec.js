@@ -59,7 +59,7 @@ describe('readMdFile', () => {
         url: 'https://github.com/',
         path: filePath,
         isValid: true,
-       status: 200,
+        status: 200,
       },
       {
         title: 'GitHub Pages',
@@ -103,6 +103,68 @@ describe('readMdFile', () => {
     };
     return readMdFile(filePath, options).then((result) => {
       expect(result).toStrictEqual(linksValidate);
+    });
+  });
+
+  it('Should return valid statistics and links from the file', () => {
+    
+    const options = {
+      validate: true,
+      stats: true,
+    }
+
+    const links = [
+  {
+    title: 'Git',
+    url: 'https://git-scm.com/',
+    path: filePath,
+    isValid: true,
+    status: 200,
+  },
+  {
+    title: 'GitHub',
+    url: 'https://github.com/',
+    path: filePath,
+    isValid: true,
+    status: 200,
+  },
+  {
+    title: 'GitHub Pages',
+    url: 'https://pages.github.com/',
+    path: filePath,
+    isValid: true,
+    status: 200,
+  },
+  {
+    title: 'Node.js',
+    url: 'https://nodejs.org/en',
+    path: filePath,
+    isValid: true,
+    status: 200,
+  },
+  {
+    title: 'Node.js',
+    url: 'https://nodejs.org/enjsdhhdjsad',
+    path: filePath,
+    isValid: false,
+    status: 404,
+  }
+]
+
+const validLinks = links.filter((link) => link.status === 200).length;
+const invalidLinks = links.filter((link) => link.status !== 200).length;
+const uniqueLinks = [...new Set(links.map((link) => link.url))].length;
+const totalLinks = links.length;
+const expectedStats = {
+  validLinks,
+  invalidLinks,
+  uniqueLinks,
+  totalLinks,
+};
+
+    
+    return readMdFile(filePath, options).then((result) => {
+      expect(result).toStrictEqual(expectedStats);
     });
   });
 

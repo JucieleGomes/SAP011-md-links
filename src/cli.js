@@ -39,6 +39,7 @@ const options = {
         }else if(options.stats){
             console.log(chalk.cyan('Total: '), chalk.cyan(links.totalLinks))
             console.log(chalk.magenta('Unique: '), chalk.magenta(links.uniqueLinks)) 
+            console.log(chalk.red('Invalid: '), chalk.red(links.invalidLinks))
             console.log('');
           
 
