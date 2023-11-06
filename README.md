@@ -30,7 +30,7 @@ Este é o projeto 4 do bootcamp Laboratória turma SAP-011, o projeto tem como o
 a criação de ferramenta de linha de comando (CLI) assim como
 a sua própria biblioteca (library) em Javascript e executada com Node.js.
 
-Neste projeto temos como objetuvo  aprender sobre processos, como interagir
+Neste projeto temos como foco aprender sobre processos, como interagir
 com sistemas de arquivos, como fazer consultas de rede, etc.
 
 Desenvolver sua própria biblioteca é uma experiência fundamental para qualquer
