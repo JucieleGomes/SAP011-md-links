@@ -125,7 +125,6 @@ Os testes forma finalizados com mais de 80% de cobertura
 * [Trello](https://trello.com/pt-BR/login)
 * [NPM](https://www.npmjs.com/)
 * [Chalk](https://www.npmjs.com/package/chalk)
-* HTML
 * JAVA SCRIPT
 * * *
 
